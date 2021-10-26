@@ -34,5 +34,12 @@ namespace RestaurantApi.Controllers
             var restaurant = _restaurantService.GetById(id);
             return Ok(restaurant);
         }
+
+        [HttpPost]
+        public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
+        {
+            var id = _restaurantService.Create(dto);
+            return Created($"/api/restaurant/{id}", null);
+        }
     }
 }
