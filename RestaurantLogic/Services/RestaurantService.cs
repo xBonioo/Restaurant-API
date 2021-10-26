@@ -62,12 +62,12 @@ namespace RestaurantLogic.Services
             _dbContext.Restaurants.Add(restaurant);
             _dbContext.SaveChanges();
 
-            _logger.LogInformation($"User create restaurnt id: {restaurant.Id}");
+            _logger.LogInformation($"User create restaurnt id: {restaurant.Id} name: {restaurant.Name}");
 
             return restaurant.Id;
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
             var restaurant = _dbContext
                 .Restaurants
@@ -82,8 +82,6 @@ namespace RestaurantLogic.Services
             _dbContext.SaveChanges();
 
             _logger.LogInformation($"User delete restaurnt id: {id}");
-
-            return true;
         }
 
         public void Update(int id, UpdateRestaurantDto dto)

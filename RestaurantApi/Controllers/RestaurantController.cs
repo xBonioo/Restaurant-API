@@ -25,6 +25,7 @@ namespace RestaurantApi.Controllers
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
             var restaurantsDtos = _restaurantService.GetAll();
+
             return Ok(restaurantsDtos);
         }
 
@@ -32,6 +33,7 @@ namespace RestaurantApi.Controllers
         public ActionResult<RestaurantDto> GetById([FromRoute] int id)
         {
             var restaurant = _restaurantService.GetById(id);
+
             return Ok(restaurant);
         }
 
@@ -39,18 +41,14 @@ namespace RestaurantApi.Controllers
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
             var id = _restaurantService.Create(dto);
+
             return Created($"/api/restaurant/{id}", null);
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var isDeleted = _restaurantService.Delete(id);
-
-            if (isDeleted)
-            {
-                return NoContent();
-            }
+            _restaurantService.Delete(id);
 
             return NotFound();
         }
@@ -59,6 +57,7 @@ namespace RestaurantApi.Controllers
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {
             _restaurantService.Update(id, dto);
+
             return Ok();
         }
     }

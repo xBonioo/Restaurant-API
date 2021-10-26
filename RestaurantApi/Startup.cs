@@ -36,6 +36,7 @@ namespace RestaurantApi
 
             services.AddScoped<RestaurantSeeder>();
             services.AddScoped<RestaurantService>();
+            services.AddScoped<DishService>();
 
             services.AddScoped<ErrorHandlingMiddleware>();
 
