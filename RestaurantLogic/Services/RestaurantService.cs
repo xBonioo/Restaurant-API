@@ -57,5 +57,40 @@ namespace RestaurantLogic.Services
 
             return restaurant.Id;
         }
+
+        public bool Delete(int id)
+        {
+            var restaurant = _dbContext
+                .Restaurants
+                .FirstOrDefault(x => x.Id == id);
+
+            if (restaurant is null)
+            {
+                throw new NotFoundException("Restaurant not found");
+            }
+
+            _dbContext.Restaurants.Remove(restaurant);
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public void Update(int id, UpdateRestaurantDto dto)
+        {
+            var restaurant = _dbContext
+                .Restaurants
+                .FirstOrDefault(r => r.Id == id);
+
+            if (restaurant is null)
+            {
+                throw new NotFoundException("Restaurant not found");
+            }
+
+            restaurant.Name = dto.Name;
+            restaurant.Description = dto.Description;
+            restaurant.HasDelivery = dto.HasDelivery;
+
+            _dbContext.SaveChanges();
+        }
     }
 }
