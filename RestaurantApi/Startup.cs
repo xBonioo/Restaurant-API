@@ -31,6 +31,9 @@ namespace RestaurantApi
             services.AddControllers();
             services.AddDbContext<RestaurantDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Task")));
+
+            services.AddScoped<RestaurantSeeder>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestaurantApi", Version = "v1" });
@@ -38,8 +41,10 @@ namespace RestaurantApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RestaurantSeeder seeder)
         {
+            seeder.Seed();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

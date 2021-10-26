@@ -17,7 +17,7 @@ namespace RestaurantCommon.Entities
         public string ContactNumber { get; set; }
 
         public int AddressId { get; set; }
-        public virtual Address Addess { get; set; }
+        public virtual Address Address { get; set; }
 
         public virtual List<Dish> Dishes { get; set; }
     }
