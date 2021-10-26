@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RestaurantCommon.Entities;
+using RestaurantCommon.Helpers.Middleware;
 using RestaurantLogic.Services;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,8 @@ namespace RestaurantApi
             services.AddScoped<RestaurantSeeder>();
             services.AddScoped<RestaurantService>();
 
+            services.AddScoped<ErrorHandlingMiddleware>();
+
             services.AddAutoMapper(this.GetType().Assembly);
 
             services.AddSwaggerGen(c =>
@@ -55,6 +58,7 @@ namespace RestaurantApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RestaurantApi v1"));
             }
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
