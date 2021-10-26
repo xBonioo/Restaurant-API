@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RestaurantCommon.Entities;
+using RestaurantLogic.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,9 @@ namespace RestaurantApi
                 options.UseSqlServer(Configuration.GetConnectionString("Task")));
 
             services.AddScoped<RestaurantSeeder>();
+            services.AddScoped<RestaurantService>();
+
+            services.AddAutoMapper(this.GetType().Assembly);
 
             services.AddSwaggerGen(c =>
             {
