@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace RestaurantLogic.Services
@@ -15,11 +16,13 @@ namespace RestaurantLogic.Services
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public RestaurantService(RestaurantDbContext dbContext, IMapper mapper)
+        public RestaurantService(RestaurantDbContext dbContext, IMapper mapper, ILogger<RestaurantService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
         public IEnumerable<RestaurantDto> GetAll()
         {
@@ -28,6 +31,8 @@ namespace RestaurantLogic.Services
                 .Include(x => x.Address)
                 .Include(x => x.Dishes)
                 .ToList();
+
+            _logger.LogInformation("User get all restaurnts");
 
             var result = _mapper.Map<List<RestaurantDto>>(restaurants);
             return result;
@@ -46,6 +51,8 @@ namespace RestaurantLogic.Services
                 throw new NotFoundException("Restaurant not found");
             }
 
+            _logger.LogInformation($"User get restaurnt id: {id}");
+
             var result = _mapper.Map<RestaurantDto>(restaurant);
             return result;
         }
@@ -54,6 +61,8 @@ namespace RestaurantLogic.Services
             var restaurant = _mapper.Map<Restaurant>(dto);
             _dbContext.Restaurants.Add(restaurant);
             _dbContext.SaveChanges();
+
+            _logger.LogInformation($"User create restaurnt id: {restaurant.Id}");
 
             return restaurant.Id;
         }
@@ -72,6 +81,8 @@ namespace RestaurantLogic.Services
             _dbContext.Restaurants.Remove(restaurant);
             _dbContext.SaveChanges();
 
+            _logger.LogInformation($"User delete restaurnt id: {id}");
+
             return true;
         }
 
@@ -89,6 +100,8 @@ namespace RestaurantLogic.Services
             restaurant.Name = dto.Name;
             restaurant.Description = dto.Description;
             restaurant.HasDelivery = dto.HasDelivery;
+
+            _logger.LogInformation($"User update restaurnt id: {id}");
 
             _dbContext.SaveChanges();
         }
