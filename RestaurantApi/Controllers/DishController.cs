@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 namespace RestaurantApi.Controllers
 {
     [Route("api/restaurant/{restaurantId}/dish")]
+    [ApiController]
+
     public class DishController : ControllerBase
     {
         private readonly DishService _dishService;

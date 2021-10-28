@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 namespace RestaurantApi.Controllers
 {
     [Route("api/restaurant")]
+    [ApiController]
+
     public class RestaurantController : ControllerBase
     {
         private readonly RestaurantService _restaurantService;

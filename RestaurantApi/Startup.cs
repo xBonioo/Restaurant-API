@@ -1,6 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RestaurantCommon.Entities;
 using RestaurantCommon.Helpers.Middleware;
+using RestaurantLogic.Models;
+using RestaurantLogic.Models.Validators;
 using RestaurantLogic.Services;
 using System;
 using System.Collections.Generic;
@@ -30,16 +35,20 @@ namespace RestaurantApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDbContext<RestaurantDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Task")));
 
             services.AddScoped<RestaurantSeeder>();
             services.AddScoped<RestaurantService>();
             services.AddScoped<DishService>();
+            services.AddScoped<AccountService>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
 
             services.AddScoped<ErrorHandlingMiddleware>();
-
+            services.AddScoped<RequestTimeMiddleware>();
+            
             services.AddAutoMapper(this.GetType().Assembly);
 
             services.AddSwaggerGen(c =>
