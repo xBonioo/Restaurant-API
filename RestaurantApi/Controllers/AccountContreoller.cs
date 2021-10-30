@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantLogic.Models;
 using RestaurantLogic.Services;
 using System;
@@ -10,6 +11,7 @@ namespace RestaurantApi.Controllers
 {
     [Route("api/account")]
     [ApiController]
+    [Authorize]
 
     public class AccountController : ControllerBase
     {
@@ -28,6 +30,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public ActionResult Login([FromBody]LoginDto dto)
         {
             string token = _accountService.GenerateJwt(dto);
