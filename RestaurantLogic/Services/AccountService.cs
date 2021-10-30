@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantCommon.Entities;
 using RestaurantCommon.Helpers;
@@ -46,7 +47,10 @@ namespace RestaurantLogic.Services
 
         public string GenerateJwt(LoginDto dto)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Email == dto.Email);
+            var user = _dbContext.Users
+                .Include(u => u.Role)
+                .FirstOrDefault(x => x.Email == dto.Email);
+
             if (user is null)
             {
                 throw new BadRequestException("Invalid email or password");
@@ -61,7 +65,7 @@ namespace RestaurantLogic.Services
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.RoleId.ToString()),
+                new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
             };
 
             if (!string.IsNullOrEmpty(user.FirstName) && !string.IsNullOrEmpty(user.LastName))

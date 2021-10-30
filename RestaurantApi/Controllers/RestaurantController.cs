@@ -44,6 +44,7 @@ namespace RestaurantApi.Controllers
         [HttpPost]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
+            //HttpContext.User.IsInRole;
             var id = _restaurantService.Create(dto);
 
             return Created($"/api/restaurant/{id}", null);
