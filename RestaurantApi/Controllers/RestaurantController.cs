@@ -42,15 +42,16 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
-            //HttpContext.User.IsInRole;
             var id = _restaurantService.Create(dto);
 
             return Created($"/api/restaurant/{id}", null);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult Delete([FromRoute] int id)
         {
             _restaurantService.Delete(id);
@@ -59,6 +60,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {
             _restaurantService.Update(id, dto);
