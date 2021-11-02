@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
+using RestaurantCommon.Helpers;
 
 namespace RestaurantLogic.Services
 {
@@ -32,7 +34,21 @@ namespace RestaurantLogic.Services
                 .Include(x => x.Dishes)
                 .Where(x => query.SearchPhrase == null || (x.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || x.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
 
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnsSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>>
+                {
+                    { nameof(Restaurant.Name), r => r.Name },
+                    { nameof(Restaurant.Description), r => r.Description },
+                    { nameof(Restaurant.Category), r => r.Category },
+                };
 
+                var selectedColumn = columnsSelectors[query.SortBy];
+
+                baseQuery = query.SortDirection == SortDirection.ASC
+                    ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
 
             var restaurants = baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
