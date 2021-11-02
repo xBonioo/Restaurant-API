@@ -24,18 +24,28 @@ namespace RestaurantLogic.Services
             _mapper = mapper;
             _logger = logger;
         }
-        public IEnumerable<RestaurantDto> GetAll(string searchPhrase)
+        public PageResult<RestaurantDto> GetAll(Query query)
         {
-            var restaurants = _dbContext
+            var baseQuery = _dbContext
                 .Restaurants
                 .Include(x => x.Address)
                 .Include(x => x.Dishes)
-                .Where(x => searchPhrase == null || (x.Name.ToLower().Contains(searchPhrase.ToLower()) || x.Description.ToLower().Contains(searchPhrase.ToLower())))
+                .Where(x => query.SearchPhrase == null || (x.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || x.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+
+
+            var restaurants = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
                 .ToList();
 
             _logger.LogInformation("User get all restaurnts");
 
-            var result = _mapper.Map<List<RestaurantDto>>(restaurants);
+            var totalItemCount = baseQuery.Count();
+            var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(restaurants);
+
+            var result = new PageResult<RestaurantDto>(restaurantsDtos, totalItemCount, query.PageSize, query.PageNumber);
+
             return result;
         }
 
