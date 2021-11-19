@@ -70,12 +70,12 @@ namespace RestaurantApi.Controllers
             return Ok();
         }
 
-        [HttpPost("delete")]
+        [HttpDelete("delete/{userId}")]
         public ActionResult Delete([FromRoute] int userId)
         {
             _accountService.Delete(userId);
 
-            return NotFound();
+            return Ok();
         }
     }
 }
