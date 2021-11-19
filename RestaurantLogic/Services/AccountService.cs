@@ -75,13 +75,6 @@ namespace RestaurantLogic.Services
                     );
             }
 
-            if (user.DateOfBirth.HasValue)
-            {
-                claims.Add(
-                    new Claim("DateOfBirth", user.DateOfBirth.Value.ToString("yyyy-MM-dd"))
-                    );
-            }
-
             if (!string.IsNullOrEmpty(user.Nationality))
             {
                 claims.Add(

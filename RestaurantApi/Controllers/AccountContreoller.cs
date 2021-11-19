@@ -11,7 +11,7 @@ namespace RestaurantApi.Controllers
 {
     [Route("api/account")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
 
     public class AccountController : ControllerBase
     {
@@ -23,6 +23,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost("register")]
+        //[AllowAnonymous]
         public ActionResult RegisterUser([FromBody]RegisterUserDto dto)
         {
             _accountService.RegisterUser(dto);
@@ -30,7 +31,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost("login")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public ActionResult Login([FromBody]LoginDto dto)
         {
             string token = _accountService.GenerateJwt(dto);
