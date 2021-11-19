@@ -15,9 +15,6 @@ namespace RestaurantLogic.Models
         public DateTime DateOfBirth { get; set; }
         public bool Gender { get; set; }
         public decimal Weight { get; set; }
-        public string Nationality { get; set; }
-        public string Password { get; set; }
-        public string PasswordHash { get; set; }
 
         public string Country { get; set; }
         public string City { get; set; }

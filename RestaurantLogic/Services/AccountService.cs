@@ -106,6 +106,7 @@ namespace RestaurantLogic.Services
         {
             var users = _dbContext
                 .Users
+                .Include(x => x.Address)
                 .ToList();
             var usersDtos = _mapper.Map<List<UserDto>>(users);
 
@@ -116,6 +117,7 @@ namespace RestaurantLogic.Services
         {
             var user = _dbContext
                 .Users
+                .Include(x => x.Address)
                 .FirstOrDefault(d => d.Id == userId);
 
             if (user is null)
@@ -130,9 +132,6 @@ namespace RestaurantLogic.Services
         public int Create(CreateUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
-
-            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
-            user.PasswordHash = hashedPassword;
 
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
@@ -167,14 +166,11 @@ namespace RestaurantLogic.Services
             }
 
             user.Email = dto.Email;
-            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
-            user.PasswordHash = hashedPassword;
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.DateOfBirth = dto.DateOfBirth;
             user.Gender = dto.Gender;
             user.Weight = dto.Weight;
-            user.Nationality = dto.Nationality;
             user.RoleId = dto.RoleId;
 
             _dbContext.SaveChanges();
