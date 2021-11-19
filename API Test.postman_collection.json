@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "201fc517-26aa-4ec2-a618-aecd20700ae5",
+		"name": "API Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNjM2ODgxNjI5LCJpc3MiOiJodHRwOi8vcmVzdGF1cmFudC5jb20iLCJhdWQiOiJodHRwOi8vcmVzdGF1cmFudC5jb20ifQ.arZobnxKwt02Fy3qD820uH8kl7i85ZKwZD_wQEJVdkw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@mail.pl\",\r\n  \"firstName\": \"Jan\",\r\n  \"lastName\": \"Kowalski\",\r\n  \"dateOfBirth\": \"2021-11-19T17:56:47.577Z\",\r\n  \"gender\": true,\r\n  \"password\": \"12345678\",\r\n  \"passwordHash\": \"12345678\",\r\n  \"country\": \"Polska\",\r\n  \"city\": \"Bialystok\",\r\n  \"postalCode\": \"15-000\",\r\n  \"street\": \"Sienkiewicza\",\r\n  \"houseNumber\": \"12\",\r\n  \"roleId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44314/api/account/create",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"account",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All accounts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44314/api/account/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get account by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44314/api/account/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"account",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test2@mail.pl\",\r\n  \"firstName\": \"Maria\",\r\n  \"lastName\": \"Nowak\",\r\n  \"dateOfBirth\": \"2021-11-19T17:56:47.577Z\",\r\n  \"gender\": false,\r\n  \"password\": \"abc123456789\",\r\n  \"passwordHash\": \"abx123456789\",\r\n  \"country\": \"Polska\",\r\n  \"city\": \"Grabowka\",\r\n  \"postalCode\": \"15-523\",\r\n  \"street\": \"Sportowa\",\r\n  \"houseNumber\": \"2\",\r\n  \"roleId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44314/api/account/update/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"account",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete account",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44314/api/account/delete/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"account",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
