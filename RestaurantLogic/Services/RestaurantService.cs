@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
+using RestaurantCommon.Helpers;
 
 namespace RestaurantLogic.Services
 {
@@ -24,17 +26,42 @@ namespace RestaurantLogic.Services
             _mapper = mapper;
             _logger = logger;
         }
-        public IEnumerable<RestaurantDto> GetAll()
+        public PageResult<RestaurantDto> GetAll(Query query)
         {
-            var restaurants = _dbContext
+            var baseQuery = _dbContext
                 .Restaurants
                 .Include(x => x.Address)
                 .Include(x => x.Dishes)
+                .Where(x => query.SearchPhrase == null || (x.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || x.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnsSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>>
+                {
+                    { nameof(Restaurant.Name), r => r.Name },
+                    { nameof(Restaurant.Description), r => r.Description },
+                    { nameof(Restaurant.Category), r => r.Category },
+                };
+
+                var selectedColumn = columnsSelectors[query.SortBy];
+
+                baseQuery = query.SortDirection == SortDirection.ASC
+                    ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
+
+            var restaurants = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
                 .ToList();
 
             _logger.LogInformation("User get all restaurnts");
 
-            var result = _mapper.Map<List<RestaurantDto>>(restaurants);
+            var totalItemCount = baseQuery.Count();
+            var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(restaurants);
+
+            var result = new PageResult<RestaurantDto>(restaurantsDtos, totalItemCount, query.PageSize, query.PageNumber);
+
             return result;
         }
 
@@ -56,6 +83,7 @@ namespace RestaurantLogic.Services
             var result = _mapper.Map<RestaurantDto>(restaurant);
             return result;
         }
+
         public int Create(CreateRestaurantDto dto)
         {
             var restaurant = _mapper.Map<Restaurant>(dto);

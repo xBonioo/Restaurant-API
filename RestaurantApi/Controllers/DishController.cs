@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantLogic.Models;
 using RestaurantLogic.Services;
 using System;
@@ -9,6 +10,9 @@ using System.Threading.Tasks;
 namespace RestaurantApi.Controllers
 {
     [Route("api/restaurant/{restaurantId}/dish")]
+    [ApiController]
+    [Authorize]
+
     public class DishController : ControllerBase
     {
         private readonly DishService _dishService;

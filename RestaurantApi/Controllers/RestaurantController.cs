@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantCommon.Entities;
@@ -12,6 +13,9 @@ using System.Threading.Tasks;
 namespace RestaurantApi.Controllers
 {
     [Route("api/restaurant")]
+    [ApiController]
+    //[Authorize]
+
     public class RestaurantController : ControllerBase
     {
         private readonly RestaurantService _restaurantService;
@@ -22,9 +26,9 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromRoute] Query query)
         {
-            var restaurantsDtos = _restaurantService.GetAll();
+            var restaurantsDtos = _restaurantService.GetAll(query);
 
             return Ok(restaurantsDtos);
         }
@@ -38,6 +42,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
             var id = _restaurantService.Create(dto);
@@ -46,6 +51,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "Admin,Manager")]
         public ActionResult Delete([FromRoute] int id)
         {
             _restaurantService.Delete(id);
@@ -54,6 +60,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPut("{id}")]
+        //[Authorize(Roles = "Admin,Manager")]
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {
             _restaurantService.Update(id, dto);

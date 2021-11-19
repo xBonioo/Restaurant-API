@@ -19,16 +19,26 @@ namespace RestaurantApi
         {
             if (_dbContext.Database.CanConnect())
             {
-                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                /*var pendingMigrations = _dbContext.Database.GetPendingMigrations();
                 if (pendingMigrations != null && pendingMigrations.Any())
                 {
                     _dbContext.Database.Migrate();
-                }
+                }*/
 
                 if (!_dbContext.Restaurants.Any())
                 {
-                    var restaurants = GetRestaurants();
-                    _dbContext.Restaurants.AddRange(restaurants);
+                    for (int i = 0; i < 25; i++)
+                    {
+                        var restaurants = GetRestaurants();
+                        _dbContext.Restaurants.AddRange(restaurants);
+                    }
+                    _dbContext.SaveChanges();
+                }
+
+                if (!_dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.Roles.AddRange(roles);
                     _dbContext.SaveChanges();
                 }
             }
@@ -75,6 +85,20 @@ namespace RestaurantApi
                         "McDonald's Corporation (McDonald's), incorporated on December 21, 1964, operates and franchises McDonald's restaurants.",
                     ContactEmail = "contact@mcdonald.com",
                     HasDelivery = true,
+                    Dishes = new List<Dish>()
+                    {
+                        new Dish()
+                        {
+                            Name = "Nashville Hot Chicken",
+                            Price = 10.30M,
+                        },
+
+                        new Dish()
+                        {
+                            Name = "Chicken Nuggets",
+                            Price = 5.30M,
+                        },
+                    },
                     Address = new Address()
                     {
                         City = "Kraków",
@@ -85,6 +109,27 @@ namespace RestaurantApi
             };
 
             return restaurants;
+        }
+
+        public IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role()
+                {
+                    Name = "User"
+                },
+                new Role()
+                {
+                    Name = "Manager"
+                },
+                new Role()
+                {
+                    Name = "Admin"
+                },
+            };
+
+            return roles;
         }
     }
 }
