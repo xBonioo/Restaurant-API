@@ -83,6 +83,7 @@ namespace RestaurantLogic.Services
             var result = _mapper.Map<RestaurantDto>(restaurant);
             return result;
         }
+
         public int Create(CreateRestaurantDto dto)
         {
             var restaurant = _mapper.Map<Restaurant>(dto);

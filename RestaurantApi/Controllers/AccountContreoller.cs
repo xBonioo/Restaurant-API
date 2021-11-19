@@ -37,5 +37,45 @@ namespace RestaurantApi.Controllers
             string token = _accountService.GenerateJwt(dto);
             return Ok(token);
         }
+
+        [HttpPost("create")]
+        public ActionResult Create([FromBody] CreateUserDto dto)
+        {
+            var id = _accountService.Create(dto);
+
+            return Created($"/api/account/{id}", null);
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<UserDto>> GetAll()
+        {
+            var result = _accountService.GetAll();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{userId}")]
+        public ActionResult<UserDto> GetById([FromRoute] int userId)
+        {
+            UserDto user = _accountService.GetById(userId);
+
+            return Ok(user);
+        }
+
+        [HttpPost("update/{userId}")]
+        public ActionResult Update([FromBody] UserDto dto, [FromRoute] int userId)
+        {
+            _accountService.Update(userId, dto);
+
+            return Ok();
+        }
+
+        [HttpPost("delete")]
+        public ActionResult Delete([FromRoute] int userId)
+        {
+            _accountService.Delete(userId);
+
+            return NotFound();
+        }
     }
 }

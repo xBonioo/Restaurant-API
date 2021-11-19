@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantCommon.Entities;
@@ -18,12 +19,14 @@ namespace RestaurantLogic.Services
     public class AccountService
     {
         private readonly RestaurantDbContext _dbContext;
+        private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
 
-        public AccountService(RestaurantDbContext dbContext, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings)
+        public AccountService(RestaurantDbContext dbContext, IMapper mapper, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
         }
@@ -33,7 +36,10 @@ namespace RestaurantLogic.Services
             var newUser = new User()
             {
                 Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
                 DateOfBirth = dto.DateOfBirth,
+                Gender = dto.Gender,
                 Nationality = dto.Nationality,
                 RoleId = dto.RoleId
             };
@@ -94,6 +100,84 @@ namespace RestaurantLogic.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
+        }
+
+        public IEnumerable<UserDto> GetAll()
+        {
+            var users = _dbContext
+                .Users
+                .ToList();
+            var usersDtos = _mapper.Map<List<UserDto>>(users);
+
+            return usersDtos;
+        }
+
+        public UserDto GetById(int userId)
+        {
+            var user = _dbContext
+                .Users
+                .FirstOrDefault(d => d.Id == userId);
+
+            if (user is null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            var userDtos = _mapper.Map<UserDto>(user);
+            return userDtos;
+        }
+
+        public int Create(CreateUserDto dto)
+        {
+            var user = _mapper.Map<User>(dto);
+
+            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+            user.PasswordHash = hashedPassword;
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            return user.Id;
+        }
+
+        public void Delete(int userId)
+        {
+            var user = _dbContext
+                .Users
+                .FirstOrDefault(x => x.Id == userId);
+
+            if (user is null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
+        }
+
+        public void Update(int userId, UserDto dto)
+        {
+            var user = _dbContext
+                .Users
+                .FirstOrDefault(r => r.Id == userId);
+
+            if (user is null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            user.Email = dto.Email;
+            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+            user.PasswordHash = hashedPassword;
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.DateOfBirth = dto.DateOfBirth;
+            user.Gender = dto.Gender;
+            user.Weight = dto.Weight;
+            user.Nationality = dto.Nationality;
+            user.RoleId = dto.RoleId;
+
+            _dbContext.SaveChanges();
         }
     }
 }

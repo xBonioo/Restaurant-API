@@ -19,11 +19,11 @@ namespace RestaurantApi
         {
             if (_dbContext.Database.CanConnect())
             {
-                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                /*var pendingMigrations = _dbContext.Database.GetPendingMigrations();
                 if (pendingMigrations != null && pendingMigrations.Any())
                 {
                     _dbContext.Database.Migrate();
-                }
+                }*/
 
                 if (!_dbContext.Restaurants.Any())
                 {

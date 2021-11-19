@@ -10,8 +10,8 @@ using RestaurantCommon.Entities;
 namespace RestaurantCommon.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20211119135752_NewDB")]
-    partial class NewDB
+    [Migration("20211119154059_NewDb")]
+    partial class NewDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -171,7 +171,8 @@ namespace RestaurantCommon.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
@@ -244,8 +245,8 @@ namespace RestaurantCommon.Migrations
             modelBuilder.Entity("RestaurantCommon.Entities.User", b =>
                 {
                     b.HasOne("RestaurantCommon.Entities.UserAddress", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
+                        .WithOne("User")
+                        .HasForeignKey("RestaurantCommon.Entities.User", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -268,6 +269,11 @@ namespace RestaurantCommon.Migrations
             modelBuilder.Entity("RestaurantCommon.Entities.Restaurant", b =>
                 {
                     b.Navigation("Dishes");
+                });
+
+            modelBuilder.Entity("RestaurantCommon.Entities.UserAddress", b =>
+                {
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

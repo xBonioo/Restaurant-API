@@ -15,5 +15,7 @@ namespace RestaurantCommon.Entities
         public string Street { get; set; }
         public string HouseNumber { get; set; }
         public string LocalNumber { get; set; }
+
+        public virtual User User { get; set; }
     }
 }
