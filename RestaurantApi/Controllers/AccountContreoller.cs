@@ -63,7 +63,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost("update/{userId}")]
-        public ActionResult Update([FromBody] UserDto dto, [FromRoute] int userId)
+        public ActionResult Update([FromBody] UpdateUserDto dto, [FromRoute] int userId)
         {
             _accountService.Update(userId, dto);
 

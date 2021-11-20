@@ -154,7 +154,7 @@ namespace RestaurantLogic.Services
             _dbContext.SaveChanges();
         }
 
-        public void Update(int userId, UserDto dto)
+        public void Update(int userId, UpdateUserDto dto)
         {
             var user = _dbContext
                 .Users
@@ -172,6 +172,9 @@ namespace RestaurantLogic.Services
             user.Gender = dto.Gender;
             user.Weight = dto.Weight;
             user.RoleId = dto.RoleId;
+
+            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+            user.PasswordHash = hashedPassword;
 
             _dbContext.SaveChanges();
         }
