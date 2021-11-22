@@ -8,13 +8,12 @@ namespace RestaurantLogic.Models
 {
     public class UpdateUserDto
     {
-        public int Id { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public bool Gender { get; set; }
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
         public string Password { get; set; }
         public string PasswordHash { get; set; }
         public string Country { get; set; }

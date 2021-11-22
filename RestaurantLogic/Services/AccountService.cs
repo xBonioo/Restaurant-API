@@ -133,6 +133,14 @@ namespace RestaurantLogic.Services
         {
             var user = _mapper.Map<User>(dto);
 
+            if (dto.RoleId.GetType() is null || dto.RoleId == 0)
+            {
+                user.RoleId = 3;
+            }
+
+            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+            user.PasswordHash = hashedPassword;
+
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
 
