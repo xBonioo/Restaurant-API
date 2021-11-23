@@ -173,13 +173,34 @@ namespace RestaurantLogic.Services
                 throw new NotFoundException("User not found");
             }
 
-            user.Email = dto.Email;
-            user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;
-            user.DateOfBirth = dto.DateOfBirth;
-            user.Gender = dto.Gender;
-            user.Weight = dto.Weight;
-            user.RoleId = dto.RoleId;
+            if (dto.Email is not null && dto.Email != user.Email)
+            {
+                user.Email = dto.Email;
+            }
+            if (dto.FirstName is not null && dto.FirstName != user.FirstName)
+            {
+                user.FirstName = dto.FirstName;
+            }
+            if (dto.LastName is not null && dto.LastName != user.LastName)
+            {
+                user.LastName = dto.LastName;
+            }
+            if (dto.DateOfBirth.GetType() is not null && dto.DateOfBirth != user.DateOfBirth)
+            {
+                user.DateOfBirth = dto.DateOfBirth;
+            }
+            if (dto.Gender.GetType() is not null && dto.Gender != user.Gender)
+            {
+                user.Email = dto.Email;
+            }
+            if (dto.Weight is not null && dto.Weight != user.Weight)
+            {
+                user.Weight = dto.Weight;
+            }
+            if (dto.RoleId.GetType() is not null && dto.RoleId != user.RoleId)
+            {
+                user.RoleId = dto.RoleId;
+            }
 
             var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
             user.PasswordHash = hashedPassword;
