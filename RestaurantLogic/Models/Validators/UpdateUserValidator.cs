@@ -24,8 +24,6 @@ namespace RestaurantLogic.Models.Validators
                 .MaximumLength(50);
             RuleFor(x => x.DateOfBirth)
                 .NotEmpty();
-            RuleFor(x => x.Gender)
-                .NotEmpty();
 
             RuleFor(x => x.Country)
                 .NotEmpty()
