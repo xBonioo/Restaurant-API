@@ -191,7 +191,7 @@ namespace RestaurantLogic.Services
             }
             if (dto.Gender.GetType() is not null && dto.Gender != user.Gender)
             {
-                user.Email = dto.Email;
+                user.Gender = dto.Gender;
             }
             if (dto.Weight is not null && dto.Weight != user.Weight)
             {

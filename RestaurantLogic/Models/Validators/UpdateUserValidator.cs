@@ -13,32 +13,22 @@ namespace RestaurantLogic.Models.Validators
         public UpdateUserValidator(RestaurantDbContext dbContext)
         {
             RuleFor(x => x.Email)
-                .NotEmpty()
                 .EmailAddress();
 
             RuleFor(x => x.FirstName)
-                .NotEmpty()
                 .MaximumLength(50);
             RuleFor(x => x.LastName)
-                .NotEmpty()
                 .MaximumLength(50);
-            RuleFor(x => x.DateOfBirth)
-                .NotEmpty();
 
             RuleFor(x => x.Country)
-                .NotEmpty()
                 .MaximumLength(100);
             RuleFor(x => x.City)
-                .NotEmpty()
                 .MaximumLength(100);
             RuleFor(x => x.PostalCode)
-                .NotEmpty()
                 .MaximumLength(10);
             RuleFor(x => x.Street)
-                .NotEmpty()
                 .MaximumLength(100);
             RuleFor(x => x.HouseNumber)
-                .NotEmpty()
                 .MaximumLength(10);
             RuleFor(x => x.LocalNumber)
                 .MaximumLength(10);
