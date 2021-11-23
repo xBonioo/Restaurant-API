@@ -17,37 +17,36 @@ namespace RestaurantLogic.Models.Validators
                 .EmailAddress();
 
             RuleFor(x => x.FirstName)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(50);
             RuleFor(x => x.LastName)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(50);
             RuleFor(x => x.DateOfBirth)
                 .NotEmpty();
             RuleFor(x => x.Gender)
                 .NotEmpty();
 
             RuleFor(x => x.Country)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(100);
             RuleFor(x => x.City)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(100);
             RuleFor(x => x.PostalCode)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(10);
             RuleFor(x => x.Street)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(100);
             RuleFor(x => x.HouseNumber)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(10);
+            RuleFor(x => x.LocalNumber)
+                .MaximumLength(10);
 
             RuleFor(x => x.Password)
                 .MinimumLength(8);
-
-            RuleFor(x => x.Email)
-                .Custom((value, context) =>
-                {
-                    var emailInUse = dbContext.Users.Any(a => a.Email == value);
-                    if (emailInUse)
-                    {
-                        context.AddFailure("Email", "That email is taken");
-                    }
-                });
         }
     }
 }
