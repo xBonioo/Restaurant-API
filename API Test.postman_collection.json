@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"test@mail.pl\",\r\n  \"firstName\": \"Jan\",\r\n  \"lastName\": \"Kowalski\",\r\n  \"dateOfBirth\": \"2021-11-19T17:56:47.577Z\",\r\n  \"gender\": true,\r\n  \"password\": \"12345678\",\r\n  \"passwordHash\": \"12345678\",\r\n  \"country\": \"Polska\",\r\n  \"city\": \"Bialystok\",\r\n  \"postalCode\": \"15-000\",\r\n  \"street\": \"Sienkiewicza\",\r\n  \"houseNumber\": \"12\",\r\n  \"roleId\": 1\r\n}",
+					"raw": "{\r\n  \"email\": \"test@mail.com\",\r\n  \"firstName\": \"Jan\",\r\n  \"lastName\": \"Kowalski\",\r\n  \"dateOfBirth\": \"2021-11-19T17:56:47.577Z\",\r\n  \"gender\": true,\r\n  \"password\": \"12345678\",\r\n  \"country\": \"Polska\",\r\n  \"city\": \"Bialystok\",\r\n  \"postalCode\": \"15-000\",\r\n  \"street\": \"Sienkiewicza\",\r\n  \"houseNumber\": \"13\",\r\n  \"roleId\": 3\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -90,7 +90,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"test2@mail.pl\",\r\n  \"firstName\": \"Maria\",\r\n  \"lastName\": \"Nowak\",\r\n  \"dateOfBirth\": \"2021-11-19T17:56:47.577Z\",\r\n  \"gender\": false,\r\n  \"password\": \"abc123456789\",\r\n  \"passwordHash\": \"abx123456789\",\r\n  \"country\": \"Polska\",\r\n  \"city\": \"Grabowka\",\r\n  \"postalCode\": \"15-523\",\r\n  \"street\": \"Sportowa\",\r\n  \"houseNumber\": \"2\",\r\n  \"roleId\": 2\r\n}",
+					"raw": "{\r\n  \"email\": \"test2@mail.pl\",\r\n  \"firstName\": \"Maria\",\r\n  \"lastName\": \"Nowak\",\r\n  \"dateOfBirth\": \"2021-11-19T17:56:47.577Z\",\r\n  \"gender\": false,\r\n  \"password\": \"abc123456789\",\r\n  \"country\": \"Polska\",\r\n  \"city\": \"Grabowka\",\r\n  \"postalCode\": \"15-523\",\r\n  \"street\": \"Sportowa\",\r\n  \"houseNumber\": \"2\",\r\n  \"roleId\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -98,7 +98,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44314/api/account/update/1",
+					"raw": "https://localhost:44314/api/account/update/8",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -108,7 +108,7 @@
 						"api",
 						"account",
 						"update",
-						"1"
+						"8"
 					]
 				}
 			},
