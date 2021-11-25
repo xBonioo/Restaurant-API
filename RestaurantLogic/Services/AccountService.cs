@@ -153,12 +153,17 @@ namespace RestaurantLogic.Services
                 .Users
                 .FirstOrDefault(x => x.Id == userId);
 
+            var address = _dbContext
+                .UserAddresses
+                .FirstOrDefault(x => x.Id == userId);
+
             if (user is null)
             {
                 throw new NotFoundException("User not found");
             }
 
             _dbContext.Users.Remove(user);
+            _dbContext.UserAddresses.Remove(address);
             _dbContext.SaveChanges();
         }
 
