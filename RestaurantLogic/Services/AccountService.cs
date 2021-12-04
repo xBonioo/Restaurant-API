@@ -119,7 +119,7 @@ namespace RestaurantLogic.Services
                             join a in _dbContext.UserAddresses on u.AddressId equals a.Id
                             where
                                 (filter.LastName != null && u.LastName.ToLower().Contains(filter.LastName.ToLower())) ||
-                                (filter.DateOfBirth == DateTime.MinValue && DateTime.Compare(filter.DateOfBirth, u.DateOfBirth) == 0)  ||
+                                (filter.DateOfBirth >= DateTime.MinValue && (u.DateOfBirth.Day == filter.DateOfBirth.Day && u.DateOfBirth.Month == filter.DateOfBirth.Month && u.DateOfBirth.Year == filter.DateOfBirth.Year))  ||
                                 (filter.Country != null && a.Country.ToLower().Contains(filter.Country.ToLower()))
                             select new UserLittleDataDto
                             {
