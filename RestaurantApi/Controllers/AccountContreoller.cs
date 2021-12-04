@@ -47,9 +47,9 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetAll()
+        public ActionResult<IEnumerable<UserLittleDataDto>> GetAll([FromQuery] Filter filter)
         {
-            var result = _accountService.GetAll();
+            var result = _accountService.GetAll(filter);
 
             return Ok(result);
         }

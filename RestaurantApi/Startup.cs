@@ -73,6 +73,7 @@ namespace RestaurantApi
             services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();
             services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
             services.AddScoped<IValidator<Query>, QueryValidator>();
+            services.AddScoped<IValidator<Filter>, FilterValidator>();
 
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();

@@ -26,7 +26,7 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromRoute] Query query)
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] Query query)
         {
             var restaurantsDtos = _restaurantService.GetAll(query);
 

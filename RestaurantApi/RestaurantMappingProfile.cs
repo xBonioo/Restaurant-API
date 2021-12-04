@@ -34,6 +34,8 @@ namespace RestaurantApi
                 .ForMember(x => x.Address,
                 c => c.MapFrom(dto => new UserAddress()
                 { Country = dto.Country, City = dto.City, Street = dto.Street, PostalCode = dto.PostalCode, HouseNumber = dto.HouseNumber }));
+            CreateMap<User, UserLittleDataDto>()
+                .ForMember(m => m.Country, c => c.MapFrom(s => s.Address.Country));
 
             CreateMap<CreateDishDto, Dish>();
         }

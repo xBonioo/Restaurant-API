@@ -20,7 +20,7 @@ namespace RestaurantLogic.Services
     {
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
-        IEnumerable<UserDto> GetAll();
+        PageResult<UserLittleDataDto> GetAll(Filter filter);
         UserDto GetById(int userId);
         int Create(CreateUserDto dto);
         void Delete(int userId);
@@ -112,15 +112,32 @@ namespace RestaurantLogic.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public IEnumerable<UserDto> GetAll()
+        public PageResult<UserLittleDataDto> GetAll(Filter filter)
         {
-            var users = _dbContext
-                .Users
-                .Include(x => x.Address)
-                .ToList();
-            var usersDtos = _mapper.Map<List<UserDto>>(users);
+            var baseQuery = from u in _dbContext.Users
+                            join a in _dbContext.UserAddresses on u.AddressId equals a.Id
+                            where
+                                a.Country.ToLower().Contains(filter.Country.ToLower())
+                            select new
+                            {
+                                u.FirstName,
+                                u.LastName,
+                                u.DateOfBirth,
+                                a.Country,
+                            };
 
-            return usersDtos;
+
+
+            var users = baseQuery
+                .Skip(filter.PageSize * (filter.PageNumber - 1))
+                .Take(filter.PageSize)
+                .ToList();
+
+            var totalItemCount = baseQuery.Count();
+            var userDtos = _mapper.Map<List<UserLittleDataDto>>(users);
+
+            var result = new PageResult<UserLittleDataDto>(userDtos, totalItemCount, filter.PageSize, filter.PageNumber);
+            return result;
         }
 
         public UserDto GetById(int userId)
