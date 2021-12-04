@@ -14,7 +14,15 @@ using RestaurantCommon.Helpers;
 
 namespace RestaurantLogic.Services
 {
-    public class RestaurantService
+    public interface IRestaurantService
+    {
+        RestaurantDto GetById(int id);
+        PageResult<RestaurantDto> GetAll(Query query);
+        int Create(CreateRestaurantDto dto);
+        void Delete(int id);
+        void Update(int id, UpdateRestaurantDto dto);
+    }
+    public class RestaurantService : IRestaurantService
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;

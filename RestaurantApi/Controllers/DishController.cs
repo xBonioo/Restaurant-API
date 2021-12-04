@@ -15,9 +15,9 @@ namespace RestaurantApi.Controllers
 
     public class DishController : ControllerBase
     {
-        private readonly DishService _dishService;
+        private readonly IDishService _dishService;
 
-        public DishController(DishService dishService)
+        public DishController(IDishService dishService)
         {
             _dishService = dishService;
         }

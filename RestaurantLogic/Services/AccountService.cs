@@ -16,7 +16,17 @@ using System.Threading.Tasks;
 
 namespace RestaurantLogic.Services
 {
-    public class AccountService
+    public interface IAccountService
+    {
+        void RegisterUser(RegisterUserDto dto);
+        string GenerateJwt(LoginDto dto);
+        IEnumerable<UserDto> GetAll();
+        UserDto GetById(int userId);
+        int Create(CreateUserDto dto);
+        void Delete(int userId);
+        void Update(int userId, UpdateUserDto dto);
+    }
+    public class AccountService : IAccountService
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;
