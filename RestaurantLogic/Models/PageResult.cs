@@ -8,11 +8,6 @@ namespace RestaurantLogic.Models
 {
     public class PageResult<T>
     {
-        private List<object> users;
-        private int totalItemCount;
-        private int pageSize;
-        private int pageNumber;
-
         public List<T> Items { get; set; }
         public int TotalPages { get; set; }
         public int ItemFrom { get; set; }

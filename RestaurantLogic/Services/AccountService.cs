@@ -8,6 +8,7 @@ using RestaurantCommon.Helpers.Exceptions;
 using RestaurantLogic.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -117,26 +118,29 @@ namespace RestaurantLogic.Services
             var baseQuery = from u in _dbContext.Users
                             join a in _dbContext.UserAddresses on u.AddressId equals a.Id
                             where
-                                a.Country.ToLower().Contains(filter.Country.ToLower())
-                            select new
+                                (filter.LastName != null && u.LastName.ToLower().Contains(filter.LastName.ToLower())) ||
+                                (filter.DateOfBirth == DateTime.MinValue && DateTime.Compare(filter.DateOfBirth, u.DateOfBirth) == 0)  ||
+                                (filter.Country != null && a.Country.ToLower().Contains(filter.Country.ToLower()))
+                            select new UserLittleDataDto
                             {
-                                u.FirstName,
-                                u.LastName,
-                                u.DateOfBirth,
-                                a.Country,
+                                FirstName = u.FirstName,
+                                LastName = u.LastName,
+                                DateOfBirth = u.DateOfBirth,
+                                Country = a.Country,
                             };
 
-
-
+            
+            //filter.DateOfBirth.Year;
+            //filter.DateOfBirth.Month
+            
             var users = baseQuery
                 .Skip(filter.PageSize * (filter.PageNumber - 1))
                 .Take(filter.PageSize)
                 .ToList();
 
             var totalItemCount = baseQuery.Count();
-            var userDtos = _mapper.Map<List<UserLittleDataDto>>(users);
 
-            var result = new PageResult<UserLittleDataDto>(userDtos, totalItemCount, filter.PageSize, filter.PageNumber);
+            var result = new PageResult<UserLittleDataDto>(users, totalItemCount, filter.PageSize, filter.PageNumber);
             return result;
         }
 
