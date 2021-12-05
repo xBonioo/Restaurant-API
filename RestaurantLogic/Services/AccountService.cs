@@ -180,14 +180,14 @@ namespace RestaurantLogic.Services
                 .Users
                 .FirstOrDefault(x => x.Id == userId);
 
-            var address = _dbContext
-                .UserAddresses
-                .FirstOrDefault(x => x.Id == user.AddressId);
-
             if (user is null)
             {
                 throw new NotFoundException("User not found");
             }
+
+            var address = _dbContext
+                .UserAddresses
+                .FirstOrDefault(x => x.Id == user.AddressId);
 
             _dbContext.Users.Remove(user);
             _dbContext.UserAddresses.Remove(address);
