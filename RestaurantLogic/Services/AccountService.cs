@@ -17,16 +17,6 @@ using System.Threading.Tasks;
 
 namespace RestaurantLogic.Services
 {
-    public interface IAccountService
-    {
-        void RegisterUser(RegisterUserDto dto);
-        string GenerateJwt(LoginDto dto);
-        PageResult<UserLittleDataDto> FilterUsers(Filter filter);
-        UserDto GetById(int userId);
-        int Create(CreateUserDto dto);
-        void Delete(int userId);
-        void Update(int userId, UpdateUserDto dto);
-    }
     public class AccountService : IAccountService
     {
         private readonly RestaurantDbContext _dbContext;
