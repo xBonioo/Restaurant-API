@@ -8,9 +8,9 @@ namespace RestaurantTests
 {
     public class CreateNewUserTests
     {
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
 
-        public CreateNewUserTests(AccountService accountService)
+        public CreateNewUserTests(IAccountService accountService)
         {
             _accountService = accountService;
         }

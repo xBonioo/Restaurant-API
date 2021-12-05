@@ -21,7 +21,7 @@ namespace RestaurantLogic.Services
     {
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
-        PageResult<UserLittleDataDto> GetAll(Filter filter);
+        PageResult<UserLittleDataDto> FilterUsers(Filter filter);
         UserDto GetById(int userId);
         int Create(CreateUserDto dto);
         void Delete(int userId);
@@ -113,13 +113,13 @@ namespace RestaurantLogic.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public PageResult<UserLittleDataDto> GetAll(Filter filter)
+        public PageResult<UserLittleDataDto> FilterUsers(Filter filter)
         {
             var baseQuery = from u in _dbContext.Users
                             join a in _dbContext.UserAddresses on u.AddressId equals a.Id
                             where
                                 (filter.LastName != null && u.LastName.ToLower().Contains(filter.LastName.ToLower())) ||
-                                (filter.DateOfBirth >= DateTime.MinValue && (u.DateOfBirth.Day == filter.DateOfBirth.Day && u.DateOfBirth.Month == filter.DateOfBirth.Month && u.DateOfBirth.Year == filter.DateOfBirth.Year))  ||
+                                (filter.DateOfBirth > DateTime.MinValue && (u.DateOfBirth.Day == filter.DateOfBirth.Day && u.DateOfBirth.Month == filter.DateOfBirth.Month && u.DateOfBirth.Year == filter.DateOfBirth.Year))  ||
                                 (filter.Country != null && a.Country.ToLower().Contains(filter.Country.ToLower()))
                             select new UserLittleDataDto
                             {
@@ -128,10 +128,6 @@ namespace RestaurantLogic.Services
                                 DateOfBirth = u.DateOfBirth,
                                 Country = a.Country,
                             };
-
-            
-            //filter.DateOfBirth.Year;
-            //filter.DateOfBirth.Month
             
             var users = baseQuery
                 .Skip(filter.PageSize * (filter.PageNumber - 1))
@@ -186,7 +182,7 @@ namespace RestaurantLogic.Services
 
             var address = _dbContext
                 .UserAddresses
-                .FirstOrDefault(x => x.Id == userId);
+                .FirstOrDefault(x => x.Id == user.AddressId);
 
             if (user is null)
             {

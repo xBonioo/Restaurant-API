@@ -34,7 +34,7 @@ namespace RestaurantTests
             //services.AddDbContext<RestaurantDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("Task")));
 
-            services.AddScoped<AccountService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
     }
 }

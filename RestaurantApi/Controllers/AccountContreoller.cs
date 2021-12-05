@@ -49,7 +49,7 @@ namespace RestaurantApi.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<UserLittleDataDto>> GetAll([FromQuery] Filter filter)
         {
-            var result = _accountService.GetAll(filter);
+            var result = _accountService.FilterUsers(filter);
 
             return Ok(result);
         }
