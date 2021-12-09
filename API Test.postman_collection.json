@@ -252,6 +252,44 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get All accounts by LastName and Country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44314/api/account?lastName=Nowak&country=string&pageSize=5&pageNumber=1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"account"
+					],
+					"query": [
+						{
+							"key": "lastName",
+							"value": "Nowak"
+						},
+						{
+							"key": "country",
+							"value": "string"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "pageNumber",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
