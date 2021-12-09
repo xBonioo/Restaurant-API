@@ -107,23 +107,11 @@ namespace RestaurantLogic.Services
         {
             var baseQuery = _dbContext
                 .Users
-                .Include(x => x.Address)
-                .Where(x => filter == null || filter != null);
+                .Include(x => x.Address);
 
-            if (!string.IsNullOrEmpty(filter.LastName))
-            {
-                baseQuery = baseQuery.Where(x => x.LastName.ToLower().Contains(filter.LastName.ToLower()));
-            }
-            if (filter.DateOfBirth > DateTime.MinValue)
-            {
-                baseQuery = baseQuery.Where(x => x.DateOfBirth.Day == filter.DateOfBirth.Day && x.DateOfBirth.Month == filter.DateOfBirth.Month && x.DateOfBirth.Year == filter.DateOfBirth.Year);
-            }
-            if (!string.IsNullOrEmpty(filter.Country))
-            {
-                baseQuery = baseQuery.Where(x => x.Address.Country.ToLower().Contains(filter.Country.ToLower()));
-            }
+            var extensionQuery = FilterExtension.FilterBy(baseQuery, filter);
 
-            var users = baseQuery.Select(x =>
+            var users = extensionQuery.Select(x =>
                 new UserLittleDataDto
                 {
                     FirstName = x.FirstName,
