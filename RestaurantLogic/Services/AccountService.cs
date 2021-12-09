@@ -105,26 +105,41 @@ namespace RestaurantLogic.Services
 
         public PageResult<UserLittleDataDto> FilterUsers(Filter filter)
         {
-            var baseQuery = from u in _dbContext.Users
-                            join a in _dbContext.UserAddresses on u.AddressId equals a.Id
-                            where
-                                (filter.LastName != null && u.LastName.ToLower().Contains(filter.LastName.ToLower())) ||
-                                (filter.DateOfBirth > DateTime.MinValue && (u.DateOfBirth.Day == filter.DateOfBirth.Day && u.DateOfBirth.Month == filter.DateOfBirth.Month && u.DateOfBirth.Year == filter.DateOfBirth.Year))  ||
-                                (filter.Country != null && a.Country.ToLower().Contains(filter.Country.ToLower()))
-                            select new UserLittleDataDto
-                            {
-                                FirstName = u.FirstName,
-                                LastName = u.LastName,
-                                DateOfBirth = u.DateOfBirth,
-                                Country = a.Country,
-                            };
-            
-            var users = baseQuery
+            var baseQuery = _dbContext
+                .Users
+                .Include(x => x.Address)
+                .Where(x => filter == null || filter != null);
+
+            if (!string.IsNullOrEmpty(filter.LastName))
+            {
+                baseQuery = baseQuery.Where(x => x.LastName.ToLower().Contains(filter.LastName.ToLower()));
+            }
+            if (filter.DateOfBirth > DateTime.MinValue)
+            {
+                baseQuery = baseQuery.Where(x => x.DateOfBirth.Day == filter.DateOfBirth.Day && x.DateOfBirth.Month == filter.DateOfBirth.Month && x.DateOfBirth.Year == filter.DateOfBirth.Year);
+            }
+            if (!string.IsNullOrEmpty(filter.Country))
+            {
+                baseQuery = baseQuery.Where(x => x.Address.Country.ToLower().Contains(filter.Country.ToLower()));
+            }
+
+            var users = baseQuery.Select(x =>
+                new UserLittleDataDto
+                {
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    DateOfBirth = x.DateOfBirth,
+                    Country = x.Address.Country,
+                }
+            ).ToList();
+
+            var totalItemCount = users.Count();
+
+            users = users
                 .Skip(filter.PageSize * (filter.PageNumber - 1))
                 .Take(filter.PageSize)
                 .ToList();
 
-            var totalItemCount = baseQuery.Count();
 
             var result = new PageResult<UserLittleDataDto>(users, totalItemCount, filter.PageSize, filter.PageNumber);
             return result;
