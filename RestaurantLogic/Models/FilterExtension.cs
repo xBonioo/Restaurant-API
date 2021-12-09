@@ -15,15 +15,15 @@ namespace RestaurantCommon.Helpers
         {
             if (!string.IsNullOrEmpty(filter.LastName))
             {
-                return value.Where(x => x.LastName.Contains(filter.LastName));
+                value = value.Where(x => x.LastName.Contains(filter.LastName));
             }
             if (filter.DateOfBirth > DateTime.MinValue)
             {
-                return value.Where(x => x.DateOfBirth.Day == filter.DateOfBirth.Day && x.DateOfBirth.Month == filter.DateOfBirth.Month && x.DateOfBirth.Year == filter.DateOfBirth.Year);
+                value = value.Where(x => x.DateOfBirth.Day == filter.DateOfBirth.Day && x.DateOfBirth.Month == filter.DateOfBirth.Month && x.DateOfBirth.Year == filter.DateOfBirth.Year);
             }
             if (!string.IsNullOrEmpty(filter.Country))
             {
-                return value.Where(x => x.Address.Country.Contains(filter.Country));
+                value = value.Where(x => x.Address.Country.Contains(filter.Country));
             }
 
             return value;

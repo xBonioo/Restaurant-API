@@ -107,11 +107,12 @@ namespace RestaurantLogic.Services
         {
             var baseQuery = _dbContext
                 .Users
-                .Include(x => x.Address);
+                .Include(x => x.Address)
+                .Where(x => filter == null || filter != null);
 
-            var extensionQuery = FilterExtension.FilterBy(baseQuery, filter);
+            baseQuery = baseQuery.FilterBy(filter);
 
-            var users = extensionQuery.Select(x =>
+            var users = baseQuery.Select(x =>
                 new UserLittleDataDto
                 {
                     FirstName = x.FirstName,
