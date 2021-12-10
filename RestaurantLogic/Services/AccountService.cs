@@ -108,7 +108,7 @@ namespace RestaurantLogic.Services
             var baseQuery = _dbContext
                 .Users
                 .Include(x => x.Address)
-                .Where(x => filter == null || filter != null);
+                .AsQueryable();
 
             baseQuery = baseQuery.FilterBy(filter);
 
