@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace RestaurantLogic.Models
 {
-    public class CreateUserDto
+    public class UpdateUserDto
     {
         public string Email { get; set; }
-        public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public bool Gender { get; set; }
         public decimal? Weight { get; set; }
-        public string Nationality { get; set; }
-
+        public string Password { get; set; }
+        public string PasswordHash { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string PostalCode { get; set; }

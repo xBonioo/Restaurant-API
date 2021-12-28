@@ -14,7 +14,7 @@ using RestaurantCommon.Helpers;
 
 namespace RestaurantLogic.Services
 {
-    public class RestaurantService
+    public class RestaurantService : IRestaurantService
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -32,8 +32,10 @@ namespace RestaurantLogic.Services
                 .Restaurants
                 .Include(x => x.Address)
                 .Include(x => x.Dishes)
-                .Where(x => query.SearchPhrase == null || (x.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || x.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
-
+                .Where(x => query.SearchPhrase == null || (x.Name.ToLower().Contains(query.SearchPhrase.ToLower())
+                                                           || x.Description.ToLower()
+                                                               .Contains(query.SearchPhrase.ToLower())));
+                
             if (!string.IsNullOrEmpty(query.SortBy))
             {
                 var columnsSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantLogic.Services
 {
-    public class DishService
+    public class DishService : IDishService
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;

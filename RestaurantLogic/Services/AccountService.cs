@@ -8,6 +8,7 @@ using RestaurantCommon.Helpers.Exceptions;
 using RestaurantLogic.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantLogic.Services
 {
-    public class AccountService
+    public class AccountService : IAccountService
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -102,20 +103,42 @@ namespace RestaurantLogic.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public IEnumerable<UserDto> GetAll()
+        public PageResult<UserLittleDataDto> FilterUsers(Filter filter)
         {
-            var users = _dbContext
+            var baseQuery = _dbContext
                 .Users
-                .ToList();
-            var usersDtos = _mapper.Map<List<UserDto>>(users);
+                .Include(x => x.Address)
+                .AsQueryable();
 
-            return usersDtos;
+            baseQuery = baseQuery.FilterBy(filter);
+
+            var users = baseQuery.Select(x =>
+                new UserLittleDataDto
+                {
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    DateOfBirth = x.DateOfBirth,
+                    Country = x.Address.Country,
+                }
+            ).ToList();
+
+            var totalItemCount = users.Count();
+
+            users = users
+                .Skip(filter.PageSize * (filter.PageNumber - 1))
+                .Take(filter.PageSize)
+                .ToList();
+
+
+            var result = new PageResult<UserLittleDataDto>(users, totalItemCount, filter.PageSize, filter.PageNumber);
+            return result;
         }
 
         public UserDto GetById(int userId)
         {
             var user = _dbContext
                 .Users
+                .Include(x => x.Address)
                 .FirstOrDefault(d => d.Id == userId);
 
             if (user is null)
@@ -130,6 +153,11 @@ namespace RestaurantLogic.Services
         public int Create(CreateUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
+
+            if (dto.RoleId.GetType() is null || dto.RoleId == 0)
+            {
+                user.RoleId = 3;
+            }
 
             var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
             user.PasswordHash = hashedPassword;
@@ -151,11 +179,16 @@ namespace RestaurantLogic.Services
                 throw new NotFoundException("User not found");
             }
 
+            var address = _dbContext
+                .UserAddresses
+                .FirstOrDefault(x => x.Id == user.AddressId);
+
             _dbContext.Users.Remove(user);
+            _dbContext.UserAddresses.Remove(address);
             _dbContext.SaveChanges();
         }
 
-        public void Update(int userId, UserDto dto)
+        public void Update(int userId, UpdateUserDto dto)
         {
             var user = _dbContext
                 .Users
@@ -166,16 +199,37 @@ namespace RestaurantLogic.Services
                 throw new NotFoundException("User not found");
             }
 
-            user.Email = dto.Email;
+            if (dto.Email is not null && dto.Email != user.Email)
+            {
+                user.Email = dto.Email;
+            }
+            if (dto.FirstName is not null && dto.FirstName != user.FirstName)
+            {
+                user.FirstName = dto.FirstName;
+            }
+            if (dto.LastName is not null && dto.LastName != user.LastName)
+            {
+                user.LastName = dto.LastName;
+            }
+            if (dto.DateOfBirth.GetType() is not null && dto.DateOfBirth != user.DateOfBirth)
+            {
+                user.DateOfBirth = dto.DateOfBirth;
+            }
+            if (dto.Gender.GetType() is not null && dto.Gender != user.Gender)
+            {
+                user.Gender = dto.Gender;
+            }
+            if (dto.Weight is not null && dto.Weight != user.Weight)
+            {
+                user.Weight = dto.Weight;
+            }
+            if (dto.RoleId.GetType() is not null && dto.RoleId != user.RoleId)
+            {
+                user.RoleId = dto.RoleId;
+            }
+
             var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
             user.PasswordHash = hashedPassword;
-            user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;
-            user.DateOfBirth = dto.DateOfBirth;
-            user.Gender = dto.Gender;
-            user.Weight = dto.Weight;
-            user.Nationality = dto.Nationality;
-            user.RoleId = dto.RoleId;
 
             _dbContext.SaveChanges();
         }

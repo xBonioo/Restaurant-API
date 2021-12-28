@@ -14,7 +14,7 @@ namespace RestaurantCommon.Entities
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public bool Gender { get; set; }
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
         public string Nationality { get; set; }
         public string PasswordHash { get; set; }
 

@@ -15,9 +15,9 @@ namespace RestaurantApi.Controllers
 
     public class AccountController : ControllerBase
     {
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
 
-        public AccountController(AccountService accountService)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
@@ -47,9 +47,9 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetAll()
+        public ActionResult<IEnumerable<UserLittleDataDto>> GetAll([FromQuery] Filter filter)
         {
-            var result = _accountService.GetAll();
+            var result = _accountService.FilterUsers(filter);
 
             return Ok(result);
         }
@@ -63,19 +63,19 @@ namespace RestaurantApi.Controllers
         }
 
         [HttpPost("update/{userId}")]
-        public ActionResult Update([FromBody] UserDto dto, [FromRoute] int userId)
+        public ActionResult Update([FromBody] UpdateUserDto dto, [FromRoute] int userId)
         {
             _accountService.Update(userId, dto);
 
             return Ok();
         }
 
-        [HttpPost("delete")]
+        [HttpDelete("delete/{userId}")]
         public ActionResult Delete([FromRoute] int userId)
         {
             _accountService.Delete(userId);
 
-            return NotFound();
+            return Ok();
         }
     }
 }

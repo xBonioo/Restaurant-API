@@ -18,15 +18,15 @@ namespace RestaurantApi.Controllers
 
     public class RestaurantController : ControllerBase
     {
-        private readonly RestaurantService _restaurantService;
+        private readonly IRestaurantService _restaurantService;
 
-        public RestaurantController(RestaurantService restaurantService)
+        public RestaurantController(IRestaurantService restaurantService)
         {
             _restaurantService = restaurantService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromRoute] Query query)
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] Query query)
         {
             var restaurantsDtos = _restaurantService.GetAll(query);
 

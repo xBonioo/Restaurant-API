@@ -64,13 +64,16 @@ namespace RestaurantApi
                 options.UseSqlServer(Configuration.GetConnectionString("Task")));
 
             services.AddScoped<RestaurantSeeder>();
-            services.AddScoped<RestaurantService>();
-            services.AddScoped<DishService>();
-            services.AddScoped<AccountService>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
+            services.AddScoped<IDishService, DishService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
+            services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();
+            services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
             services.AddScoped<IValidator<Query>, QueryValidator>();
+            services.AddScoped<IValidator<Filter>, FilterValidator>();
 
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
